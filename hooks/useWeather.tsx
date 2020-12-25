@@ -4,6 +4,7 @@ import { GeoCordinates, WeatherProps } from "../interfaces/types";
 
 const useGeoWeather = (city?: string) => {
   const [usingGeoIp, setGeoIp] = useState(false);
+  const [error, setError] = useState(false);
   const [weather, setWeather] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [location, setLocation] = useState<GeoCordinates>({
@@ -14,7 +15,6 @@ const useGeoWeather = (city?: string) => {
   useEffect(() => {
     async function withBrowserLocation() {
       navigator.geolocation.getCurrentPosition(success, error);
-      console.log(city);
 
       async function success(pos: any) {
         await getWeather({
@@ -39,13 +39,15 @@ const useGeoWeather = (city?: string) => {
 
     if (city !== undefined) {
       withWeatherCity(city).then((weather) => {
-        setWeather(weather);
-        setLoading(false);
+        if (weather) {
+          setWeather(weather);
+          setLoading(false);
+        }
       });
     } else {
       withBrowserLocation();
     }
-  }, []);
+  }, [city]);
 
   return [weather, loading, usingGeoIp, location];
 };
@@ -55,18 +57,22 @@ export default useGeoWeather;
 export async function withWeatherCordinates(
   props: GeoCordinates
 ): Promise<WeatherProps> {
-  const _result = await axios.get(
-    `http://api.openweathermap.org/data/2.5/weather?units=metric&lat=${props.lat.toString()}&lon=${props?.lng.toString()}&appid=${
-      process.env.WEATHER_KEY
-    }`
-  );
-  return _result.data;
+  return await axios
+    .get(
+      `http://api.openweathermap.org/data/2.5/weather?units=metric&lat=${props.lat.toString()}&lon=${props?.lng.toString()}&appid=${
+        process.env.WEATHER_KEY
+      }`
+    )
+    .then((result) => result.data)
+    .catch((_) => false);
 }
 export async function withWeatherCity(cityName: string): Promise<WeatherProps> {
-  const _result = await axios.get(
-    `http://api.openweathermap.org/data/2.5/weather?units=metric&q=${cityName}&appid=${process.env.WEATHER_KEY}`
-  );
-  return _result.data;
+  return await axios
+    .get(
+      `http://api.openweathermap.org/data/2.5/weather?units=metric&q=${cityName}&appid=${process.env.WEATHER_KEY}`
+    )
+    .then((result) => result.data)
+    .catch((_) => false);
 }
 
 export async function withIpLocation(): Promise<GeoCordinates> {

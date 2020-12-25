@@ -41,12 +41,13 @@ var axios_1 = require("axios");
 var react_1 = require("react");
 var useGeoWeather = function (city) {
     var _a = react_1.useState(false), usingGeoIp = _a[0], setGeoIp = _a[1];
-    var _b = react_1.useState(), weather = _b[0], setWeather = _b[1];
-    var _c = react_1.useState(true), loading = _c[0], setLoading = _c[1];
-    var _d = react_1.useState({
+    var _b = react_1.useState(false), error = _b[0], setError = _b[1];
+    var _c = react_1.useState(), weather = _c[0], setWeather = _c[1];
+    var _d = react_1.useState(true), loading = _d[0], setLoading = _d[1];
+    var _e = react_1.useState({
         lat: 0,
         lng: 0
-    }), location = _d[0], setLocation = _d[1];
+    }), location = _e[0], setLocation = _e[1];
     react_1.useEffect(function () {
         function withBrowserLocation() {
             return __awaiter(this, void 0, void 0, function () {
@@ -88,33 +89,33 @@ var useGeoWeather = function (city) {
                 }
                 return __generator(this, function (_a) {
                     navigator.geolocation.getCurrentPosition(success, error);
-                    console.log(city);
                     return [2 /*return*/];
                 });
             });
         }
         if (city !== undefined) {
             withWeatherCity(city).then(function (weather) {
-                setWeather(weather);
-                setLoading(false);
+                if (weather) {
+                    setWeather(weather);
+                    setLoading(false);
+                }
             });
         }
         else {
             withBrowserLocation();
         }
-    }, []);
+    }, [city]);
     return [weather, loading, usingGeoIp, location];
 };
 exports["default"] = useGeoWeather;
 function withWeatherCordinates(props) {
     return __awaiter(this, void 0, Promise, function () {
-        var _result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, axios_1["default"].get("http://api.openweathermap.org/data/2.5/weather?units=metric&lat=" + props.lat.toString() + "&lon=" + (props === null || props === void 0 ? void 0 : props.lng.toString()) + "&appid=" + process.env.WEATHER_KEY)];
-                case 1:
-                    _result = _a.sent();
-                    return [2 /*return*/, _result.data];
+                case 0: return [4 /*yield*/, axios_1["default"]
+                        .get("http://api.openweathermap.org/data/2.5/weather?units=metric&lat=" + props.lat.toString() + "&lon=" + (props === null || props === void 0 ? void 0 : props.lng.toString()) + "&appid=" + process.env.WEATHER_KEY)
+                        .then(function (result) { return result.data; })["catch"](function (_) { return false; })];
+                case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
@@ -122,13 +123,12 @@ function withWeatherCordinates(props) {
 exports.withWeatherCordinates = withWeatherCordinates;
 function withWeatherCity(cityName) {
     return __awaiter(this, void 0, Promise, function () {
-        var _result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, axios_1["default"].get("http://api.openweathermap.org/data/2.5/weather?units=metric&q=" + cityName + "&appid=" + process.env.WEATHER_KEY)];
-                case 1:
-                    _result = _a.sent();
-                    return [2 /*return*/, _result.data];
+                case 0: return [4 /*yield*/, axios_1["default"]
+                        .get("http://api.openweathermap.org/data/2.5/weather?units=metric&q=" + cityName + "&appid=" + process.env.WEATHER_KEY)
+                        .then(function (result) { return result.data; })["catch"](function (_) { return false; })];
+                case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });

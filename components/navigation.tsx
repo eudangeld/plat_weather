@@ -1,14 +1,10 @@
 import { Box, Text } from "grommet";
 import { HomeOption } from "grommet-icons";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { FC } from "react";
 import { NavigationProps } from "../interfaces/types";
 
 const Navigation: FC<NavigationProps> = (props) => {
-  const router = useRouter();
-  const _topic = router.asPath.split("/")[2];
-
   return (
     <Box
       style={{ boxShadow: "none" }}
@@ -18,7 +14,9 @@ const Navigation: FC<NavigationProps> = (props) => {
       margin={{ left: "small" }}
       direction="column"
     >
-      <Text margin={{ bottom: "small", top: "medium" }}>Filter by country</Text>
+      <Text margin={{ bottom: "small", top: "medium" }}>
+        Filter by EUA city
+      </Text>
 
       {mockNavigation.map((item) => (
         <Link
@@ -27,17 +25,14 @@ const Navigation: FC<NavigationProps> = (props) => {
           href={"/city/" + item.toLowerCase()}
         >
           <Box
+            margin={{ bottom: "medium" }}
             style={{ boxShadow: "none" }}
             gap={"mediu,"}
             align="center"
             direction="row"
           >
-            <HomeOption
-              color={_topic === item.toLowerCase() ? "brand" : "black"}
-            />
-            <Text color={_topic === item.toLowerCase() ? "brand" : "black"}>
-              {item}
-            </Text>
+            <HomeOption color="white" />
+            <Text color="white">{item}</Text>
           </Box>
         </Link>
       ))}
@@ -50,7 +45,6 @@ export default Navigation;
 export const mockNavigation = [
   "Chicago",
   "New orleans",
-  "Oahu",
   "Nashville",
   "Los Angeles",
   "New York City",

@@ -7,8 +7,6 @@ import useGeoWeather from "../../hooks/useWeather";
 const Topic: NextPage = (_) => {
   const router = useRouter();
   const [weather, loading] = useGeoWeather(router.asPath.split("/")[2]);
-  console.log(weather, loading);
-
   if (loading) {
     return <Spinner />;
   }

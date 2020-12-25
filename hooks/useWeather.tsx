@@ -6,35 +6,40 @@ const useGeoWeather = () => {
   const [usingGeoIp, setGeoIp] = useState(false);
   const [weather, setWeather] = useState<any>();
   const [loading, setLoading] = useState(true);
+  const [location, setLocation] = useState<GeoCordinates>({
+    lat: 0,
+    lng: 0,
+  });
 
   useEffect(() => {
-    let geo: any;
     async function withBrowserLocation() {
-      navigator.geolocation.getCurrentPosition((b) => {
-        setGeoIp(false);
-        return {
-          lat: b.coords.latitude,
-          lng: b.coords.longitude,
-        };
-      });
-    }
+      navigator.geolocation.getCurrentPosition(success, error);
 
-    async function getLocation() {
-      geo = await withBrowserLocation();
-      if (geo === undefined) {
-        setGeoIp(true);
-        geo = await useIPWeather();
+      async function success(pos: any) {
+        await getWeather({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
       }
-      useWeatherCordinates(geo).then((_weather) => {
-        setWeather(_weather);
-        setLoading(false);
-      });
+
+      async function error(_: any) {
+        setGeoIp(true);
+        withIpLocation().then(getWeather);
+      }
+
+      async function getWeather(position: any) {
+        useWeatherCordinates(position).then((weather) => {
+          setLocation(position);
+          setWeather(weather);
+          setLoading(false);
+        });
+      }
     }
 
-    getLocation();
+    withBrowserLocation();
   }, []);
 
-  return [weather, loading, usingGeoIp];
+  return [weather, loading, usingGeoIp, location];
 };
 
 export default useGeoWeather;
@@ -50,7 +55,7 @@ export async function useWeatherCordinates(
   return _result.data;
 }
 
-export async function useIPWeather(): Promise<GeoCordinates> {
+export async function withIpLocation(): Promise<GeoCordinates> {
   const _result = await axios.get(
     `https://ipgeolocation.abstractapi.com/v1/?api_key=${process.env.IPLOCATION_KEY}`
   );

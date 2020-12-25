@@ -15,6 +15,7 @@ const useGeoWeather = (city?: string) => {
     async function withBrowserLocation() {
       navigator.geolocation.getCurrentPosition(success, error);
       console.log(city);
+
       async function success(pos: any) {
         await getWeather({
           lat: pos.coords.latitude,
@@ -36,7 +37,14 @@ const useGeoWeather = (city?: string) => {
       }
     }
 
-    withBrowserLocation();
+    if (city !== undefined) {
+      withWeatherCity(city).then((weather) => {
+        setWeather(weather);
+        setLoading(false);
+      });
+    } else {
+      withBrowserLocation();
+    }
   }, []);
 
   return [weather, loading, usingGeoIp, location];
@@ -56,7 +64,7 @@ export async function withWeatherCordinates(
 }
 export async function withWeatherCity(cityName: string): Promise<WeatherProps> {
   const _result = await axios.get(
-    `api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${process.env.WEATHER_KEY}`
+    `http://api.openweathermap.org/data/2.5/weather?units=metric&q=${cityName}&appid=${process.env.WEATHER_KEY}`
   );
   return _result.data;
 }

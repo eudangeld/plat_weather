@@ -93,7 +93,15 @@ var useGeoWeather = function (city) {
                 });
             });
         }
-        withBrowserLocation();
+        if (city !== undefined) {
+            withWeatherCity(city).then(function (weather) {
+                setWeather(weather);
+                setLoading(false);
+            });
+        }
+        else {
+            withBrowserLocation();
+        }
     }, []);
     return [weather, loading, usingGeoIp, location];
 };
@@ -117,7 +125,7 @@ function withWeatherCity(cityName) {
         var _result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, axios_1["default"].get("api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + process.env.WEATHER_KEY)];
+                case 0: return [4 /*yield*/, axios_1["default"].get("http://api.openweathermap.org/data/2.5/weather?units=metric&q=" + cityName + "&appid=" + process.env.WEATHER_KEY)];
                 case 1:
                     _result = _a.sent();
                     return [2 /*return*/, _result.data];

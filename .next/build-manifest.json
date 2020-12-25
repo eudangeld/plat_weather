@@ -29,10 +29,10 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
     ],
-    "/country/[city]": [
+    "/city/[city]": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
-      "static/chunks/pages/country/[city].js"
+      "static/chunks/pages/city/[city].js"
     ]
   },
   "ampFirstPages": []

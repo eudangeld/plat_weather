@@ -24,7 +24,7 @@ const Navigation: FC<NavigationProps> = (props) => {
         <Link
           key={`${item}eia-key-`}
           passHref
-          href={"/country/" + item.toLowerCase()}
+          href={"/city/" + item.toLowerCase()}
         >
           <Box
             style={{ boxShadow: "none" }}

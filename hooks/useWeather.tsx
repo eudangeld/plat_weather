@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { GeoCordinates, WeatherProps } from "../interfaces/types";
 
-const useGeoWeather = () => {
+const useGeoWeather = (city?: string) => {
   const [usingGeoIp, setGeoIp] = useState(false);
   const [weather, setWeather] = useState<any>();
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ const useGeoWeather = () => {
   useEffect(() => {
     async function withBrowserLocation() {
       navigator.geolocation.getCurrentPosition(success, error);
-
+      console.log(city);
       async function success(pos: any) {
         await getWeather({
           lat: pos.coords.latitude,
@@ -28,7 +28,7 @@ const useGeoWeather = () => {
       }
 
       async function getWeather(position: any) {
-        useWeatherCordinates(position).then((weather) => {
+        withWeatherCordinates(position).then((weather) => {
           setLocation(position);
           setWeather(weather);
           setLoading(false);
@@ -44,13 +44,19 @@ const useGeoWeather = () => {
 
 export default useGeoWeather;
 
-export async function useWeatherCordinates(
+export async function withWeatherCordinates(
   props: GeoCordinates
 ): Promise<WeatherProps> {
   const _result = await axios.get(
     `http://api.openweathermap.org/data/2.5/weather?units=metric&lat=${props.lat.toString()}&lon=${props?.lng.toString()}&appid=${
       process.env.WEATHER_KEY
     }`
+  );
+  return _result.data;
+}
+export async function withWeatherCity(cityName: string): Promise<WeatherProps> {
+  const _result = await axios.get(
+    `api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${process.env.WEATHER_KEY}`
   );
   return _result.data;
 }

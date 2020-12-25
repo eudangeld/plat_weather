@@ -36,10 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.withIpLocation = exports.useWeatherCordinates = void 0;
+exports.withIpLocation = exports.withWeatherCity = exports.withWeatherCordinates = void 0;
 var axios_1 = require("axios");
 var react_1 = require("react");
-var useGeoWeather = function () {
+var useGeoWeather = function (city) {
     var _a = react_1.useState(false), usingGeoIp = _a[0], setGeoIp = _a[1];
     var _b = react_1.useState(), weather = _b[0], setWeather = _b[1];
     var _c = react_1.useState(true), loading = _c[0], setLoading = _c[1];
@@ -77,7 +77,7 @@ var useGeoWeather = function () {
                 function getWeather(position) {
                     return __awaiter(this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
-                            useWeatherCordinates(position).then(function (weather) {
+                            withWeatherCordinates(position).then(function (weather) {
                                 setLocation(position);
                                 setWeather(weather);
                                 setLoading(false);
@@ -88,6 +88,7 @@ var useGeoWeather = function () {
                 }
                 return __generator(this, function (_a) {
                     navigator.geolocation.getCurrentPosition(success, error);
+                    console.log(city);
                     return [2 /*return*/];
                 });
             });
@@ -97,7 +98,7 @@ var useGeoWeather = function () {
     return [weather, loading, usingGeoIp, location];
 };
 exports["default"] = useGeoWeather;
-function useWeatherCordinates(props) {
+function withWeatherCordinates(props) {
     return __awaiter(this, void 0, Promise, function () {
         var _result;
         return __generator(this, function (_a) {
@@ -110,7 +111,21 @@ function useWeatherCordinates(props) {
         });
     });
 }
-exports.useWeatherCordinates = useWeatherCordinates;
+exports.withWeatherCordinates = withWeatherCordinates;
+function withWeatherCity(cityName) {
+    return __awaiter(this, void 0, Promise, function () {
+        var _result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, axios_1["default"].get("api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + process.env.WEATHER_KEY)];
+                case 1:
+                    _result = _a.sent();
+                    return [2 /*return*/, _result.data];
+            }
+        });
+    });
+}
+exports.withWeatherCity = withWeatherCity;
 function withIpLocation() {
     return __awaiter(this, void 0, Promise, function () {
         var _result;

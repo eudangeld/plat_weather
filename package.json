@@ -1,0 +1,45 @@
+{
+  "name": "with-typescript",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "type-check": "tsc",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "dependencies": {
+    "@types/styled-components": "^5.1.5",
+    "axios": "^0.21.0",
+    "cookie-cutter": "^0.2.0",
+    "grommet": "^2.16.0",
+    "grommet-icons": "^4.5.0",
+    "grommet-styles": "^0.2.0",
+    "newsapi": "^2.4.1",
+    "next": "latest",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-redux": "^7.2.2",
+    "sass": "^1.30.0",
+    "styled-components": "^5.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@storybook/addon-actions": "^6.1.11",
+    "@storybook/addon-essentials": "^6.1.11",
+    "@storybook/addon-links": "^6.1.11",
+    "@storybook/react": "^6.1.11",
+    "@types/node": "^12.12.21",
+    "@types/react": "^16.9.16",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-redux": "^7.1.12",
+    "babel-loader": "^8.2.2",
+    "gulp": "^4.0.2",
+    "gulp-theo": "^2.0.1",
+    "plugin-error": "^1.0.1",
+    "theo": "^8.1.5",
+    "typescript": "4.0"
+  },
+  "license": "MIT"
+}
